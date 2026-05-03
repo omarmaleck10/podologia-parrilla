@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Admin · Podologia Parrilla</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #F4F6F9;
+      --color-white: #FFFFFF;
+      --color-dark: #1A1A2E;
+      --color-accent: #2C5F4A;
+      --color-accent-light: #4A8C6F;
+      --color-accent-pale: #E8F0EB;
+      --color-border: #E2E8F0;
+      --color-muted: #64748B;
+      --color-danger: #DC2626;
+      --color-warning: #D97706;
+      --color-success: #059669;
+      --color-sidebar: #1E293B;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-dark); line-height: 1.5; }
+
+    /* ─── LOGIN ─── */
+    .login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--color-sidebar) 0%, #0F172A 100%);
+      padding: 24px;
+    }
+
+    .login-card {
+      background: var(--color-white); border-radius: 16px;
+      padding: 48px 40px; width: 100%; max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo img { height: 52px; width: auto; }
+    .login-logo h1 { font-family: var(--font-serif); font-size: 22px; margin-top: 12px; }
+    .login-logo p { font-size: 13px; color: var(--color-muted); margin-top: 4px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .form-input {
+      width: 100%; padding: 12px 16px;
+      background: var(--color-bg); border: 1.5px solid var(--color-border);
+      border-radius: var(--radius); font-family: var(--font-sans); font-size: 15px;
+      color: var(--color-dark); outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--color-accent); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 20px; border-radius: var(--radius);
+      font-family: var(--font-sans); font-size: 14px; font-weight: 600;
+      cursor: pointer; border: none; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--color-accent); color: white; }
+    .btn-primary:hover { background: var(--color-accent-light); }
+    .btn-danger { background: var(--color-danger); color: white; }
+    .btn-success { background: var(--color-success); color: white; }
+    .btn-ghost { background: transparent; color: var(--color-muted); }
+    .btn-ghost:hover { background: var(--color-bg); }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+    .btn-full { width: 100%; }
+
+    .login-hint { font-size: 12px; color: var(--color-muted); text-align: center; margin-top: 16px; }
+    .login-hint strong { color: var(--color-accent); }
+
+    /* ─── APP SHELL ─── */
+    .app { display: none; height: 100vh; overflow: hidden; }
+    .app.visible { display: flex; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--color-sidebar);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-header img { height: 36px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
+    .sidebar-header p { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 6px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .sidebar-nav { flex: 1; padding: 16px 0; }
+
+    .nav-group-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); padding: 12px 20px 6px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 20px; cursor: pointer; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.2s; border-radius: 0;
+      background: none; border: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .nav-item.active { background: rgba(44,95,74,0.3); color: white; }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    .sidebar-footer {
+      padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--color-accent); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .sidebar-user strong { display: block; font-size: 13px; color: white; }
+    .sidebar-user span { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+    /* ─── MAIN ─── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar {
+      background: var(--color-white); border-bottom: 1px solid var(--color-border);
+      padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .topbar h2 { font-family: var(--font-serif); font-size: 22px; }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+    .content { flex: 1; overflow-y: auto; padding: 32px; }
+
+    /* ─── CARDS ─── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+
+    .stat-card {
+      background: var(--color-white); border-radius: var(--radius);
+      padding: 24px; box-shadow: var(--shadow);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--color-accent-pale);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .stat-icon svg { width: 20px; height: 20px; stroke: var(--color-accent); fill: none; stroke-width: 1.5; }
+    .stat-card span { font-size: 13px; color: var(--color-muted); }
+    .stat-card strong { display: block; font-size: 30px; font-weight: 700; line-height: 1.1; margin: 4px 0; }
+    .stat-card small { font-size: 12px; }
+    .stat-positive { color: var(--color-success); }
+    .stat-negative { color: var(--color-danger); }
+
+    /* ─── TABLE ─── */
+    .card {
+      background: var(--color-white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .card-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--color-border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .card-header h3 { font-size: 16px; font-weight: 600; }
+
+    .search-input {
+      padding: 8px 14px; border: 1.5px solid var(--color-border);
+      border-radius: var(--radius); font-size: 14px; font-family: var(--font-sans);
+      outline: none; background: var(--color-bg); color: var(--color-dark);
+      width: 220px; transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--color-accent); }
+
+    .filter-select {
+      padding: 8px 12px; border: 1.5px solid var(--color-border);
+      border-radius: var(--radius); font-size: 14px; font-family: var(--font-sans);
+      background: var(--color-bg); color: var(--color-dark); outline: none;
+      cursor: pointer;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; padding: 12px 16px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--color-muted); background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    td {
+      padding: 14px 16px; font-size: 14px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(0,0,0,0.01); }
+
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .badge-pending { background: #FEF3C7; color: #92400E; }
+    .badge-confirmed { background: #D1FAE5; color: #065F46; }
+    .badge-cancelled { background: #FEE2E2; color: #991B1B; }
+    .badge-done { background: #E0E7FF; color: #3730A3; }
+
+    /* ─── VIEWS ─── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 999;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--color-white); border-radius: 12px;
+      padding: 32px; width: 100%; max-width: 500px;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 20px; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+    .detail-row {
+      display: flex; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid var(--color-border);
+      font-size: 14px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row span:first-child { color: var(--color-muted); font-size: 13px; }
+    .detail-row span:last-child { font-weight: 500; }
+
+    /* ─── CHARTS (simple bars) ─── */
+    .chart-simple {
+      display: flex; align-items: flex-end; gap: 8px;
+      height: 100px; padding: 8px 0;
+    }
+    .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .chart-bar {
+      width: 100%; background: var(--color-accent-pale); border-radius: 3px 3px 0 0;
+      transition: background 0.2s; cursor: pointer;
+    }
+    .chart-bar:hover { background: var(--color-accent-light); }
+    .chart-bar.today { background: var(--color-accent); }
+    .chart-label { font-size: 10px; color: var(--color-muted); }
+
+    /* ─── EMPTY ─── */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--color-muted); }
+    .empty-state svg { width: 48px; height: 48px; stroke: currentColor; fill: none; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state h4 { font-size: 16px; margin-bottom: 8px; color: var(--color-dark); }
+
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { width: 200px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 20px; }
+      .topbar { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── LOGIN ─── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODAgMTYwIiB3aWR0aD0iNDgwIiBoZWlnaHQ9IjE2MCI+CjxkZWZzPgogIDxzdHlsZT4KICAgIEBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PVBsYXlmYWlyK0Rpc3BsYXk6d2dodEA3MDAmZGlzcGxheT1zd2FwJyk7CiAgPC9zdHlsZT4KPC9kZWZzPgo8IS0tIEZvb3QgbWFyayBpY29uIC0tPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LCAxNSkiPgogIDwhLS0gTWFpbiBmb290IGJvZHkgLS0+CiAgPHBhdGggZD0iTTU1IDEyMCBRMzUgMTA4IDI4IDg1IFEyMCA1OCAzMiAzNSBRNDQgMTIgNjIgMTAgUTc4IDggODQgMjIgUTkyIDQwIDgyIDY4IFE3NCA5MCA3OCAxMDggUTgyIDEyNCA2OCAxMzIgUTU1IDEzOCA0OCAxMjggUTQ1IDEyNCA1NSAxMjBaIiAKICAgICAgICBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSBCaWcgdG9lIC0tPgogIDxlbGxpcHNlIGN4PSI4MiIgY3k9IjgiIHJ4PSIxNCIgcnk9IjE3IiBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSAybmQgdG9lIC0tPgogIDxlbGxpcHNlIGN4PSI5OCIgY3k9IjIwIiByeD0iMTEiIHJ5PSIxNCIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gM3JkIHRvZSAtLT4KICA8ZWxsaXBzZSBjeD0iMTA3IiBjeT0iMzYiIHJ4PSIxMCIgcnk9IjEyIiBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSA0dGggdG9lIC0tPgogIDxlbGxpcHNlIGN4PSIxMTAiIGN5PSI1NCIgcng9IjkiIHJ5PSIxMSIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gNXRoIHRvZSAtLT4KICA8ZWxsaXBzZSBjeD0iMTA2IiBjeT0iNzAiIHJ4PSI3LjUiIHJ5PSIxMCIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gSW5uZXIgaGlnaGxpZ2h0L2RldGFpbCAtLT4KICA8cGF0aCBkPSJNNDUgNjUgUTU1IDQ4IDYyIDU1IFE1OCA2OCA0NSA2NVoiIGZpbGw9IiM0QThDNkYiIG9wYWNpdHk9IjAuNiIvPgo8L2c+CjwhLS0gVmVydGljYWwgZGl2aWRlciAtLT4KPGxpbmUgeDE9IjEzOCIgeTE9IjIwIiB4Mj0iMTM4IiB5Mj0iMTQwIiBzdHJva2U9IiNEMEQ4RDQiIHN0cm9rZS13aWR0aD0iMS41Ii8+CjwhLS0gVGV4dCBibG9jayAtLT4KPCEtLSBDRU5UUk8gREUgUE9ET0xPR8ONQSAtLT4KPHRleHQgeD0iMTU1IiB5PSI1NSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzZCNjU2MCIgbGV0dGVyLXNwYWNpbmc9IjIuNSIgdGV4dC10cmFuc2Zvcm09InVwcGVyY2FzZSI+Q0VOVFJPIERFPC90ZXh0Pgo8IS0tIFBBUlJJTExBIC0tPgo8dGV4dCB4PSIxNTIiIHk9IjEwMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI0MiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzJDNUY0QSIgbGV0dGVyLXNwYWNpbmc9IjQiPlBBUlJJTExBPC90ZXh0Pgo8IS0tIExpbmUgLS0+CjxsaW5lIHgxPSIxNTUiIHkxPSIxMTIiIHgyPSI0NjUiIHkyPSIxMTIiIHN0cm9rZT0iIzJDNUY0QSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPCEtLSBQT0RPTE9Hw41BIMK3IEZJU0lPVEVSQVBJQSAtLT4KPHRleHQgeD0iMTU1IiB5PSIxMzIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjMkM1RjRBIiBsZXR0ZXItc3BhY2luZz0iMyI+UE9ET0xPR8ONQSAgwrcgIEZJU0lPVEVSQVBJQTwvdGV4dD4KPC9zdmc+" alt="Podologia Parrilla" />
+      <h1>Panel de Administracion</h1>
+      <p>Podologia y Fisioterapia Parrilla</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" id="loginEmail" value="admin@podologiaparrilla.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contrasena</label>
+      <input type="password" class="form-input" id="loginPassword" value="admin123" />
+    </div>
+    <button class="btn btn-primary btn-full" style="height:48px; font-size:15px;" onclick="doLogin()">Entrar al panel</button>
+    <p class="login-hint">Version de prueba &mdash; Email: <strong>admin@podologiaparrilla.com</strong> / Pass: <strong>admin123</strong></p>
+  </div>
+</div>
+
+<!-- ─── APP ─── -->
+<div class="app" id="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODAgMTYwIiB3aWR0aD0iNDgwIiBoZWlnaHQ9IjE2MCI+CjxkZWZzPgogIDxzdHlsZT4KICAgIEBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PVBsYXlmYWlyK0Rpc3BsYXk6d2dodEA3MDAmZGlzcGxheT1zd2FwJyk7CiAgPC9zdHlsZT4KPC9kZWZzPgo8IS0tIEZvb3QgbWFyayBpY29uIC0tPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LCAxNSkiPgogIDwhLS0gTWFpbiBmb290IGJvZHkgLS0+CiAgPHBhdGggZD0iTTU1IDEyMCBRMzUgMTA4IDI4IDg1IFEyMCA1OCAzMiAzNSBRNDQgMTIgNjIgMTAgUTc4IDggODQgMjIgUTkyIDQwIDgyIDY4IFE3NCA5MCA3OCAxMDggUTgyIDEyNCA2OCAxMzIgUTU1IDEzOCA0OCAxMjggUTQ1IDEyNCA1NSAxMjBaIiAKICAgICAgICBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSBCaWcgdG9lIC0tPgogIDxlbGxpcHNlIGN4PSI4MiIgY3k9IjgiIHJ4PSIxNCIgcnk9IjE3IiBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSAybmQgdG9lIC0tPgogIDxlbGxpcHNlIGN4PSI5OCIgY3k9IjIwIiByeD0iMTEiIHJ5PSIxNCIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gM3JkIHRvZSAtLT4KICA8ZWxsaXBzZSBjeD0iMTA3IiBjeT0iMzYiIHJ4PSIxMCIgcnk9IjEyIiBmaWxsPSIjMkM1RjRBIi8+CiAgPCEtLSA0dGggdG9lIC0tPgogIDxlbGxpcHNlIGN4PSIxMTAiIGN5PSI1NCIgcng9IjkiIHJ5PSIxMSIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gNXRoIHRvZSAtLT4KICA8ZWxsaXBzZSBjeD0iMTA2IiBjeT0iNzAiIHJ4PSI3LjUiIHJ5PSIxMCIgZmlsbD0iIzJDNUY0QSIvPgogIDwhLS0gSW5uZXIgaGlnaGxpZ2h0L2RldGFpbCAtLT4KICA8cGF0aCBkPSJNNDUgNjUgUTU1IDQ4IDYyIDU1IFE1OCA2OCA0NSA2NVoiIGZpbGw9IiM0QThDNkYiIG9wYWNpdHk9IjAuNiIvPgo8L2c+CjwhLS0gVmVydGljYWwgZGl2aWRlciAtLT4KPGxpbmUgeDE9IjEzOCIgeTE9IjIwIiB4Mj0iMTM4IiB5Mj0iMTQwIiBzdHJva2U9IiNEMEQ4RDQiIHN0cm9rZS13aWR0aD0iMS41Ii8+CjwhLS0gVGV4dCBibG9jayAtLT4KPCEtLSBDRU5UUk8gREUgUE9ET0xPR8ONQSAtLT4KPHRleHQgeD0iMTU1IiB5PSI1NSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzZCNjU2MCIgbGV0dGVyLXNwYWNpbmc9IjIuNSIgdGV4dC10cmFuc2Zvcm09InVwcGVyY2FzZSI+Q0VOVFJPIERFPC90ZXh0Pgo8IS0tIFBBUlJJTExBIC0tPgo8dGV4dCB4PSIxNTIiIHk9IjEwMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI0MiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzJDNUY0QSIgbGV0dGVyLXNwYWNpbmc9IjQiPlBBUlJJTExBPC90ZXh0Pgo8IS0tIExpbmUgLS0+CjxsaW5lIHgxPSIxNTUiIHkxPSIxMTIiIHgyPSI0NjUiIHkyPSIxMTIiIHN0cm9rZT0iIzJDNUY0QSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPCEtLSBQT0RPTE9Hw41BIMK3IEZJU0lPVEVSQVBJQSAtLT4KPHRleHQgeD0iMTU1IiB5PSIxMzIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjMkM1RjRBIiBsZXR0ZXItc3BhY2luZz0iMyI+UE9ET0xPR8ONQSAgwrcgIEZJU0lPVEVSQVBJQTwvdGV4dD4KPC9zdmc+" alt="Logo" />
+      <p>Panel de administracion</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Principal</div>
+      <button class="nav-item active" onclick="showView('dashboard', this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="showView('reservas', this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Reservas
+      </button>
+      <button class="nav-item" onclick="showView('pacientes', this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Pacientes
+      </button>
+      <div class="nav-group-label" style="margin-top:8px">Configuracion</div>
+      <button class="nav-item" onclick="showView('horarios', this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Horarios
+      </button>
+      <button class="nav-item" onclick="showView('servicios', this)">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Servicios y tarifas
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">JM</div>
+        <div>
+          <strong>Jose Manuel P.</strong>
+          <span>Administrador</span>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm btn-full" onclick="doLogout()">Cerrar sesion</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="topbar-actions">
+        <a href="/" target="_blank" class="btn btn-ghost btn-sm">Ver web publica</a>
+        <button class="btn btn-primary btn-sm" onclick="openNewBookingModal()">+ Nueva reserva</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD VIEW -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-grid" id="statsGrid">
+          <!-- filled by JS -->
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
+          <!-- Mini chart -->
+          <div class="card">
+            <div class="card-header"><h3>Reservas esta semana</h3></div>
+            <div style="padding: 20px 24px;">
+              <div class="chart-simple" id="weekChart"></div>
+            </div>
+          </div>
+          <!-- Proximas citas -->
+          <div class="card">
+            <div class="card-header"><h3>Proximas citas hoy</h3></div>
+            <div id="todayBookings" style="padding: 8px 0;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Ultimas reservas</h3>
+            <a href="#" onclick="showView('reservas', null); return false;" style="font-size:13px; color:var(--color-accent); text-decoration:none;">Ver todas</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Paciente</th>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="recentBookingsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RESERVAS VIEW -->
+      <div class="view" id="view-reservas">
+        <div class="card">
+          <div class="card-header">
+            <h3>Todas las reservas</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <input type="search" class="search-input" placeholder="Buscar paciente..." oninput="filterBookings(this.value)" />
+              <select class="filter-select" onchange="filterByStatus(this.value)">
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="realizada">Realizada</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Paciente</th>
+                <th>Telefono</th>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="allBookingsTable"></tbody>
+          </table>
+          <div id="bookingsEmpty" class="empty-state" style="display:none;">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <h4>No hay reservas</h4>
+            <p>Cuando los pacientes reserven citas apareceran aqui.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACIENTES VIEW -->
+      <div class="view" id="view-pacientes">
+        <div class="card">
+          <div class="card-header">
+            <h3>Pacientes registrados</h3>
+            <input type="search" class="search-input" placeholder="Buscar..." oninput="filterPatients(this.value)" />
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Telefono</th>
+                <th>Email</th>
+                <th>Citas</th>
+                <th>Ultima visita</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="patientsTable"></tbody>
+          </table>
+          <div id="patientsEmpty" class="empty-state" style="display:none;">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <h4>No hay pacientes aun</h4>
+            <p>Cuando los pacientes realicen su primera reserva apareceran aqui.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HORARIOS VIEW -->
+      <div class="view" id="view-horarios">
+        <div class="card" style="max-width:600px;">
+          <div class="card-header"><h3>Configurar horarios</h3></div>
+          <div style="padding: 24px;">
+            <p style="font-size:14px; color:var(--color-muted); margin-bottom:24px;">Define los dias y horas en los que el centro atiende pacientes. Estos horarios se mostraran en el formulario de reservas.</p>
+            <div id="scheduleEditor"></div>
+            <div style="margin-top:24px;">
+              <button class="btn btn-primary" onclick="saveSchedule()">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICIOS VIEW -->
+      <div class="view" id="view-servicios">
+        <div class="card">
+          <div class="card-header">
+            <h3>Servicios y tarifas</h3>
+            <button class="btn btn-primary btn-sm" onclick="openAddServiceModal()">Anadir servicio</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Servicio</th><th>Precio</th><th>Duracion</th><th>Activo</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="servicesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE RESERVA -->
+<div class="modal-overlay" id="bookingDetailModal">
+  <div class="modal">
+    <h3>Detalle de reserva</h3>
+    <div id="bookingDetailContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('bookingDetailModal')">Cerrar</button>
+      <button class="btn btn-success btn-sm" id="confirmBtn" onclick="changeStatus('confirmada')">Confirmar</button>
+      <button class="btn btn-danger btn-sm" id="cancelBtn" onclick="changeStatus('cancelada')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVA RESERVA -->
+<div class="modal-overlay" id="newBookingModal">
+  <div class="modal">
+    <h3>Nueva reserva manual</h3>
+    <div class="form-group">
+      <label class="form-label">Nombre completo</label>
+      <input type="text" class="form-input" id="nb-nombre" placeholder="Nombre del paciente" />
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="form-group">
+        <label class="form-label">Telefono</label>
+        <input type="tel" class="form-input" id="nb-telefono" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="nb-email" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Servicio</label>
+      <select class="form-input" id="nb-servicio">
+        <option value="Consulta Podologica">Consulta Podologica - 30€</option>
+        <option value="Exploracion Biomedanica">Exploracion Biomedanica - 50€</option>
+        <option value="Biomedanica + Plantillas">Biomedanica + Plantillas - 170€</option>
+        <option value="Verruga plantar">Verruga plantar - 120€</option>
+        <option value="Fisioterapia">Fisioterapia</option>
+      </select>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="form-group">
+        <label class="form-label">Fecha</label>
+        <input type="date" class="form-input" id="nb-fecha" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hora</label>
+        <select class="form-input" id="nb-hora">
+          <option>09:00</option><option>09:30</option><option>10:00</option>
+          <option>10:30</option><option>11:00</option><option>11:30</option>
+          <option>12:00</option><option>16:00</option><option>16:30</option>
+          <option>17:00</option><option>18:00</option><option>19:00</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('newBookingModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveNewBooking()">Guardar reserva</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── ESTADO ───
+  let currentBookingId = null;
+  let allBookings = [];
+  let filteredBookings = [];
+
+  const SERVICES = [
+    { name: 'Consulta Podologica', price: 30, duration: 30, active: true },
+    { name: 'Quiropodia', price: 30, duration: 30, active: true },
+    { name: 'Exploracion Biomedanica', price: 50, duration: 45, active: true },
+    { name: 'Biomedanica + Plantillas', price: 170, duration: 60, active: true },
+    { name: 'Verruga plantar (1)', price: 120, duration: 45, active: true },
+    { name: 'Verrugas (2+)', price: 150, duration: 60, active: true },
+    { name: 'Podologia Deportiva', price: 50, duration: 45, active: true },
+    { name: 'Fisioterapia', price: 0, duration: 45, active: true },
+  ];
+
+  // ─── DATOS DE DEMO ───
+  function getSeedBookings() {
+    const today = new Date();
+    const fmt = (d) => d.toISOString().split('T')[0];
+    const ayer = new Date(today); ayer.setDate(today.getDate()-1);
+    const man = new Date(today); man.setDate(today.getDate()+1);
+    const pos = new Date(today); pos.setDate(today.getDate()+3);
+
+    return [
+      { id:'B001', nombre:'Maria', apellidos:'Garcia Lopez', telefono:'612345678', email:'maria@email.com', servicio:'Consulta Podologica — 30€', fecha:fmt(ayer), hora:'10:00', estado:'realizada', notas:'', createdAt: ayer.toISOString() },
+      { id:'B002', nombre:'Antonio', apellidos:'Ruiz Fernandez', telefono:'623456789', email:'antonio@email.com', servicio:'Exploracion Biomedanica — 50€', fecha:fmt(today), hora:'09:30', estado:'confirmada', notas:'Lleva tiempo con dolor en el talon', createdAt: ayer.toISOString() },
+      { id:'B003', nombre:'Laura', apellidos:'Sanchez Mora', telefono:'634567890', email:'laura@email.com', servicio:'Biomedanica + Plantillas — 170€', fecha:fmt(today), hora:'11:00', estado:'pendiente', notas:'', createdAt: today.toISOString() },
+      { id:'B004', nombre:'Carlos', apellidos:'Martinez Gil', telefono:'645678901', email:'carlos@email.com', servicio:'Verruga plantar (1) — 120€', fecha:fmt(man), hora:'09:00', estado:'pendiente', notas:'Verruga en el talon izquierdo', createdAt: today.toISOString() },
+      { id:'B005', nombre:'Sofia', apellidos:'Perez Navarro', telefono:'656789012', email:'sofia@email.com', servicio:'Consulta Podologica — 30€', fecha:fmt(man), hora:'10:30', estado:'confirmada', notas:'', createdAt: today.toISOString() },
+      { id:'B006', nombre:'Miguel', apellidos:'Torres Alba', telefono:'667890123', email:'miguel@email.com', servicio:'Fisioterapia — Consultar', fecha:fmt(pos), hora:'16:00', estado:'pendiente', notas:'Lesion de rodilla', createdAt: today.toISOString() },
+    ];
+  }
+
+  // ─── AUTH ───
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPassword').value;
+    if (email === 'admin@podologiaparrilla.com' && pass === 'admin123') {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      initApp();
+    } else {
+      alert('Credenciales incorrectas. Usa las credenciales de prueba indicadas.');
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+  });
+
+  function doLogout() {
+    document.getElementById('app').classList.remove('visible');
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  // ─── INIT ───
+  function initApp() {
+    // Merge seed + localStorage
+    const saved = JSON.parse(localStorage.getItem('parrilla_bookings') || '[]');
+    const seed = getSeedBookings();
+    const savedIds = saved.map(b => b.id);
+    allBookings = [...seed.filter(s => !savedIds.includes(s.id)), ...saved];
+    filteredBookings = [...allBookings];
+
+    renderDashboard();
+    renderBookingsTable();
+    renderPatientsTable();
+    renderServicesTable();
+    renderSchedule();
+  }
+
+  function persist() {
+    localStorage.setItem('parrilla_bookings', JSON.stringify(allBookings));
+  }
+
+  // ─── NAVIGATION ───
+  function showView(view, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const titles = { dashboard:'Dashboard', reservas:'Reservas', pacientes:'Pacientes', horarios:'Horarios de atencion', servicios:'Servicios y tarifas' };
+    document.getElementById('pageTitle').textContent = titles[view] || view;
+
+    if (view === 'reservas') renderBookingsTable();
+    if (view === 'pacientes') renderPatientsTable();
+    if (view === 'servicios') renderServicesTable();
+  }
+
+  // ─── DASHBOARD ───
+  function renderDashboard() {
+    const today = new Date().toISOString().split('T')[0];
+    const todayB = allBookings.filter(b => b.fecha === today);
+    const pending = allBookings.filter(b => b.estado === 'pendiente').length;
+    const confirmed = allBookings.filter(b => b.estado === 'confirmada').length;
+    const thisWeek = allBookings.filter(b => {
+      const d = new Date(b.fecha + 'T12:00:00');
+      const now = new Date();
+      const diff = (d - now) / (1000*60*60*24);
+      return diff >= -7 && diff <= 7;
+    }).length;
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div>
+          <span>Citas hoy</span>
+          <strong>${todayB.length}</strong>
+          <small>${todayB.filter(b=>b.estado==='confirmada').length} confirmadas</small>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div>
+          <span>Pendientes</span>
+          <strong>${pending}</strong>
+          <small class="${pending > 0 ? 'stat-negative' : ''}">Por confirmar</small>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div>
+          <span>Esta semana</span>
+          <strong>${thisWeek}</strong>
+          <small class="stat-positive">reservas totales</small>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div>
+          <span>Pacientes</span>
+          <strong>${getUniquePatients().length}</strong>
+          <small>registrados</small>
+        </div>
+      </div>
+    `;
+
+    // Week chart
+    const days = ['L','M','X','J','V','S','D'];
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const weekData = days.map((d, i) => {
+      const date = new Date(now);
+      date.setDate(now.getDate() - dayOfWeek + 1 + i);
+      const dateStr = date.toISOString().split('T')[0];
+      const count = allBookings.filter(b => b.fecha === dateStr).length;
+      return { label: d, count, isToday: i === (dayOfWeek - 1) };
+    });
+    const maxCount = Math.max(...weekData.map(d => d.count), 1);
+    document.getElementById('weekChart').innerHTML = weekData.map(d => `
+      <div class="chart-bar-wrap">
+        <div class="chart-bar ${d.isToday ? 'today' : ''}" style="height:${Math.max((d.count/maxCount)*80, d.count>0?8:2)}px" title="${d.count} reservas"></div>
+        <span class="chart-label">${d.label}</span>
+      </div>
+    `).join('');
+
+    // Today bookings
+    const todayEl = document.getElementById('todayBookings');
+    if (todayB.length === 0) {
+      todayEl.innerHTML = '<div class="empty-state" style="padding:30px 20px;"><p>No hay citas para hoy</p></div>';
+    } else {
+      todayEl.innerHTML = todayB.sort((a,b) => a.hora.localeCompare(b.hora)).map(b => `
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-bottom:1px solid var(--color-border);">
+          <div>
+            <strong style="font-size:14px;">${b.hora} &mdash; ${b.nombre} ${b.apellidos}</strong>
+            <div style="font-size:12px; color:var(--color-muted);">${b.servicio.split('—')[0].trim()}</div>
+          </div>
+          <span class="badge badge-${b.estado}">${b.estado}</span>
+        </div>
+      `).join('');
+    }
+
+    // Recent bookings
+    const recent = [...allBookings].sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt)).slice(0, 5);
+    document.getElementById('recentBookingsTable').innerHTML = recent.map(b => `
+      <tr>
+        <td style="font-size:12px; color:var(--color-muted);">${b.id}</td>
+        <td><strong>${b.nombre} ${b.apellidos}</strong></td>
+        <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${b.servicio.split('—')[0].trim()}</td>
+        <td>${formatDate(b.fecha)} ${b.hora}</td>
+        <td><span class="badge badge-${b.estado}">${b.estado}</span></td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openBookingDetail('${b.id}')">Ver</button></td>
+      </tr>
+    `).join('');
+  }
+
+  // ─── RESERVAS ───
+  function renderBookingsTable(data) {
+    const bookings = data || [...allBookings].sort((a,b) => new Date(b.fecha + 'T' + b.hora) - new Date(a.fecha + 'T' + a.hora));
+    const tbody = document.getElementById('allBookingsTable');
+    const empty = document.getElementById('bookingsEmpty');
+
+    if (bookings.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    tbody.innerHTML = bookings.map(b => `
+      <tr>
+        <td style="font-size:12px; color:var(--color-muted);">${b.id}</td>
+        <td><strong>${b.nombre} ${b.apellidos}</strong></td>
+        <td>${b.telefono}</td>
+        <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${b.servicio.split('—')[0].trim()}</td>
+        <td>${formatDate(b.fecha)}</td>
+        <td>${b.hora}</td>
+        <td><span class="badge badge-${b.estado}">${b.estado}</span></td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-ghost btn-sm" onclick="openBookingDetail('${b.id}')">Ver</button>
+            <button class="btn btn-success btn-sm" onclick="quickStatus('${b.id}', 'confirmada')">OK</button>
+            <button class="btn btn-danger btn-sm" onclick="quickStatus('${b.id}', 'cancelada')">X</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterBookings(query) {
+    const q = query.toLowerCase();
+    filteredBookings = allBookings.filter(b =>
+      (b.nombre + ' ' + b.apellidos).toLowerCase().includes(q) ||
+      b.email.toLowerCase().includes(q) || b.telefono.includes(q)
+    );
+    renderBookingsTable(filteredBookings);
+  }
+
+  function filterByStatus(status) {
+    filteredBookings = status ? allBookings.filter(b => b.estado === status) : [...allBookings];
+    renderBookingsTable(filteredBookings);
+  }
+
+  function quickStatus(id, status) {
+    const b = allBookings.find(x => x.id === id);
+    if (b) { b.estado = status; persist(); renderBookingsTable(); renderDashboard(); }
+  }
+
+  // ─── PACIENTES ───
+  function getUniquePatients() {
+    const seen = {};
+    return allBookings.filter(b => {
+      const key = b.email || (b.nombre + b.apellidos);
+      if (seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
+  }
+
+  function renderPatientsTable(query) {
+    let patients = getUniquePatients();
+    if (query) {
+      const q = query.toLowerCase();
+      patients = patients.filter(p => (p.nombre+' '+p.apellidos).toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
+    }
+    const tbody = document.getElementById('patientsTable');
+    const empty = document.getElementById('patientsEmpty');
+    if (patients.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    tbody.innerHTML = patients.map(p => {
+      const visits = allBookings.filter(b => b.email === p.email).length;
+      const last = allBookings.filter(b => b.email === p.email).sort((a,b2) => new Date(b2.fecha) - new Date(a.fecha))[0];
+      return `<tr>
+        <td><strong>${p.nombre} ${p.apellidos}</strong></td>
+        <td>${p.telefono}</td>
+        <td>${p.email}</td>
+        <td>${visits}</td>
+        <td>${last ? formatDate(last.fecha) : '-'}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="filterBookingsByEmail('${p.email}')">Ver citas</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function filterPatients(q) { renderPatientsTable(q); }
+
+  function filterBookingsByEmail(email) {
+    showView('reservas', document.querySelector('[onclick*="reservas"]'));
+    const f = allBookings.filter(b => b.email === email);
+    renderBookingsTable(f);
+  }
+
+  // ─── SERVICIOS ───
+  function renderServicesTable() {
+    document.getElementById('servicesTable').innerHTML = SERVICES.map((s, i) => `
+      <tr>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.price > 0 ? s.price + '€' : 'Consultar'}</td>
+        <td>${s.duration} min</td>
+        <td>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" ${s.active ? 'checked' : ''} onchange="toggleService(${i})" />
+            <span style="font-size:13px;">${s.active ? 'Activo' : 'Inactivo'}</span>
+          </label>
+        </td>
+        <td><button class="btn btn-ghost btn-sm">Editar</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function toggleService(i) { SERVICES[i].active = !SERVICES[i].active; renderServicesTable(); }
+
+  // ─── HORARIOS ───
+  function renderSchedule() {
+    const days = [
+      { name: 'Lunes', morning: '09:00 - 14:00', afternoon: '16:00 - 20:00', active: true },
+      { name: 'Martes', morning: '09:00 - 14:00', afternoon: '16:00 - 20:00', active: true },
+      { name: 'Miercoles', morning: '09:00 - 14:00', afternoon: '16:00 - 20:00', active: true },
+      { name: 'Jueves', morning: '09:00 - 14:00', afternoon: '16:00 - 20:00', active: true },
+      { name: 'Viernes', morning: '09:00 - 14:00', afternoon: '16:00 - 20:00', active: true },
+      { name: 'Sabado', morning: 'Consultar', afternoon: '-', active: false },
+      { name: 'Domingo', morning: '-', afternoon: '-', active: false },
+    ];
+    document.getElementById('scheduleEditor').innerHTML = days.map(d => `
+      <div style="display:grid; grid-template-columns:100px 1fr 1fr 60px; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--color-border);">
+        <strong style="font-size:14px;">${d.name}</strong>
+        <input type="text" class="form-input" value="${d.morning}" style="font-size:13px; padding:8px 12px;" />
+        <input type="text" class="form-input" value="${d.afternoon}" style="font-size:13px; padding:8px 12px;" />
+        <label style="cursor:pointer;"><input type="checkbox" ${d.active ? 'checked' : ''} /></label>
+      </div>
+    `).join('') + '<div style="display:grid; grid-template-columns:100px 1fr 1fr 60px; gap:12px; padding:8px 0;"><span style="font-size:12px;color:var(--color-muted);">Dia</span><span style="font-size:12px;color:var(--color-muted);">Manana</span><span style="font-size:12px;color:var(--color-muted);">Tarde</span><span style="font-size:12px;color:var(--color-muted);">Activo</span></div>';
+  }
+
+  function saveSchedule() { alert('Horarios guardados correctamente (version demo).'); }
+
+  // ─── MODALS ───
+  function openBookingDetail(id) {
+    currentBookingId = id;
+    const b = allBookings.find(x => x.id === id);
+    if (!b) return;
+    document.getElementById('bookingDetailContent').innerHTML = `
+      <div class="detail-row"><span>ID</span><span>${b.id}</span></div>
+      <div class="detail-row"><span>Paciente</span><span>${b.nombre} ${b.apellidos}</span></div>
+      <div class="detail-row"><span>Telefono</span><span><a href="tel:${b.telefono}">${b.telefono}</a></span></div>
+      <div class="detail-row"><span>Email</span><span>${b.email}</span></div>
+      <div class="detail-row"><span>Servicio</span><span>${b.servicio}</span></div>
+      <div class="detail-row"><span>Fecha</span><span>${formatDate(b.fecha)}</span></div>
+      <div class="detail-row"><span>Hora</span><span>${b.hora}</span></div>
+      <div class="detail-row"><span>Estado</span><span><span class="badge badge-${b.estado}">${b.estado}</span></span></div>
+      ${b.notas ? `<div class="detail-row"><span>Notas</span><span>${b.notas}</span></div>` : ''}
+    `;
+    document.getElementById('bookingDetailModal').classList.add('open');
+  }
+
+  function changeStatus(status) {
+    const b = allBookings.find(x => x.id === currentBookingId);
+    if (b) { b.estado = status; persist(); }
+    closeModal('bookingDetailModal');
+    renderBookingsTable();
+    renderDashboard();
+  }
+
+  function openNewBookingModal() {
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    document.getElementById('nb-fecha').value = today.toISOString().split('T')[0];
+    document.getElementById('newBookingModal').classList.add('open');
+  }
+
+  function saveNewBooking() {
+    const nombre = document.getElementById('nb-nombre').value.trim();
+    const telefono = document.getElementById('nb-telefono').value.trim();
+    const email = document.getElementById('nb-email').value.trim();
+    const servicio = document.getElementById('nb-servicio').value;
+    const fecha = document.getElementById('nb-fecha').value;
+    const hora = document.getElementById('nb-hora').value;
+
+    if (!nombre || !telefono || !fecha) { alert('Completa los campos obligatorios'); return; }
+
+    const parts = nombre.split(' ');
+    const nb = {
+      id: 'B' + Date.now(),
+      nombre: parts[0], apellidos: parts.slice(1).join(' ') || '-',
+      telefono, email: email || '-',
+      servicio, fecha, hora,
+      estado: 'confirmada', notas: '',
+      createdAt: new Date().toISOString()
+    };
+
+    allBookings.unshift(nb);
+    persist();
+    closeModal('newBookingModal');
+    renderDashboard();
+    renderBookingsTable();
+  }
+
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  function openAddServiceModal() { alert('Funcion disponible en la version completa con backend.'); }
+
+  // ─── UTILS ───
+  function formatDate(str) {
+    if (!str) return '-';
+    const d = new Date(str + 'T12:00:00');
+    return d.toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "podologia-parrilla",
+  "version": "1.0.0",
+  "description": "Web y panel de administracion del Centro de Podologia Parrilla - Sevilla",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "resend": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
