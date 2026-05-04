@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Podología Parrilla — Centro de Podología y Fisioterapia · Sevilla</title>
+  <meta name="description" content="Centro de Podología y Fisioterapia en Sevilla. Prevención, diagnóstico y tratamiento para la salud de tus pies. Más de 8 años de experiencia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────────────────── */
+    :root {
+      --navy:        #0B1F3A;
+      --navy-mid:    #132d52;
+      --mint:        #2ABFA3;
+      --mint-light:  #3DD6BA;
+      --mint-pale:   #E6F7F4;
+      --white:       #FFFFFF;
+      --off-white:   #F5F8FC;
+      --slate:       #4A5568;
+      --border:      #DCE8F0;
+      --serif:       'DM Serif Display', Georgia, serif;
+      --sans:        'DM Sans', system-ui, sans-serif;
+      --radius:      6px;
+      --radius-lg:   14px;
+      --shadow:      0 2px 16px rgba(11,31,58,.07);
+      --shadow-lg:   0 8px 48px rgba(11,31,58,.12);
+      --ease:        .22s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--navy);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── HEADER ─────────────────────────────────────────────────────────── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow var(--ease);
+    }
+    .header.scrolled { box-shadow: var(--shadow); }
+
+    .nav {
+      max-width: 1180px; margin: 0 auto; padding: 0 28px;
+      height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex; align-items: center; gap: 11px;
+      flex-shrink: 0;
+    }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: var(--navy);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 22px; height: 22px; fill: var(--mint); }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-text strong {
+      font-family: var(--serif);
+      font-size: 17px; color: var(--navy); letter-spacing: .01em;
+    }
+    .logo-text span {
+      font-size: 10.5px; color: var(--slate);
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+    }
+
+    /* Nav links */
+    .nav-links {
+      display: flex; align-items: center; gap: 4px; list-style: none;
+      flex: 1; justify-content: center;
+    }
+    .nav-links a {
+      display: block; padding: 8px 14px;
+      font-size: 14px; font-weight: 500; color: var(--slate);
+      border-radius: var(--radius);
+      transition: color var(--ease), background var(--ease);
+    }
+    .nav-links a:hover { color: var(--navy); background: var(--off-white); }
+    .nav-links a.active { color: var(--mint); }
+
+    .nav-cta {
+      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px;
+      background: var(--navy); color: var(--white);
+      border-radius: var(--radius);
+      font-size: 14px; font-weight: 600;
+      transition: background var(--ease), transform var(--ease);
+    }
+    .nav-cta:hover { background: var(--navy-mid); transform: translateY(-1px); }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--navy); border-radius: 2px;
+      transition: all var(--ease);
+    }
+
+    /* Mobile menu */
+    .mobile-nav {
+      display: none;
+      position: fixed; top: 70px; left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 28px 28px;
+      flex-direction: column; gap: 4px;
+      box-shadow: var(--shadow);
+      z-index: 199;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      padding: 11px 14px; font-size: 15px; font-weight: 500;
+      color: var(--slate); border-radius: var(--radius);
+      transition: background var(--ease), color var(--ease);
+    }
+    .mobile-nav a:hover { background: var(--off-white); color: var(--navy); }
+    .mobile-nav .mobile-cta {
+      margin-top: 12px; padding: 13px;
+      background: var(--navy); color: var(--white);
+      text-align: center; border-radius: var(--radius);
+      font-weight: 600; font-size: 15px;
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────────────────── */
+    .hero {
+      padding-top: 70px;
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-left {
+      background: var(--navy);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 64px 80px 80px;
+      position: relative; z-index: 1;
+    }
+    .hero-left::after {
+      content: '';
+      position: absolute; top: 0; right: -60px; bottom: 0;
+      width: 120px;
+      background: var(--navy);
+      clip-path: polygon(0 0, 50% 0, 100% 100%, 0% 100%);
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(42,191,163,.15);
+      border: 1px solid rgba(42,191,163,.3);
+      color: var(--mint-light);
+      font-size: 12px; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 28px; width: fit-content;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mint); flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(42,191,163,.25);
+    }
+
+    .hero-left h1 {
+      font-family: var(--serif);
+      font-size: clamp(42px, 5vw, 68px);
+      line-height: 1.08; color: var(--white);
+      margin-bottom: 24px;
+      letter-spacing: -.01em;
+    }
+    .hero-left h1 em {
+      font-style: italic; color: var(--mint);
+    }
+
+    .hero-desc {
+      font-size: 17px; line-height: 1.7;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 44px; max-width: 420px;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: var(--radius);
+      font-family: var(--sans); font-size: 15px; font-weight: 600;
+      cursor: pointer; border: none; transition: all var(--ease);
+      text-decoration: none;
+    }
+    .btn-mint { background: var(--mint); color: var(--white); }
+    .btn-mint:hover { background: var(--mint-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(42,191,163,.35); }
+    .btn-ghost-white {
+      background: transparent; color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.3);
+    }
+    .btn-ghost-white:hover { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.08); }
+    .btn-navy { background: var(--navy); color: var(--white); }
+    .btn-navy:hover { background: var(--navy-mid); transform: translateY(-1px); }
+    .btn-outline-mint {
+      background: transparent; color: var(--mint);
+      border: 1.5px solid var(--mint);
+    }
+    .btn-outline-mint:hover { background: var(--mint); color: var(--white); }
+
+    /* Stat bar */
+    .hero-stats {
+      display: flex; gap: 0;
+      margin-top: 56px; padding-top: 44px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .hero-stat {
+      flex: 1; padding-right: 28px;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+    .hero-stat:last-child { border-right: none; padding-right: 0; padding-left: 28px; }
+    .hero-stat:not(:first-child) { padding-left: 28px; }
+    .hero-stat strong {
+      display: block;
+      font-family: var(--serif); font-size: 44px; line-height: 1;
+      color: var(--mint); margin-bottom: 4px;
+    }
+    .hero-stat span { font-size: 13px; color: rgba(255,255,255,.55); }
+
+    /* Hero photo */
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+    }
+    /* Overlay card */
+    .hero-card {
+      position: absolute; bottom: 36px; left: -20px;
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 18px 22px; box-shadow: var(--shadow-lg);
+      min-width: 230px;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .hero-card-rating {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 6px;
+    }
+    .stars { color: #F5A623; font-size: 13px; letter-spacing: 1px; }
+    .hero-card-rating strong { font-size: 15px; font-weight: 700; }
+    .hero-card p { font-size: 12px; color: var(--slate); }
+    .hero-card-tag {
+      display: inline-block; margin-top: 8px;
+      background: var(--mint-pale); color: var(--mint);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 100px;
+    }
+
+    /* ─── SECTION COMMONS ────────────────────────────────────────────────── */
+    .section { padding: 96px 28px; }
+    .section-sm { padding: 72px 28px; }
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    .label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--mint);
+      margin-bottom: 16px;
+    }
+    .label::before {
+      content: ''; display: block;
+      width: 20px; height: 2px; background: var(--mint); border-radius: 2px;
+    }
+
+    .section-head { margin-bottom: 60px; }
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.12; letter-spacing: -.01em;
+      margin-bottom: 16px;
+    }
+    .section-head p {
+      font-size: 17px; color: var(--slate);
+      max-width: 540px; line-height: 1.7;
+    }
+    .section-head.centered { text-align: center; }
+    .section-head.centered p { margin: 0 auto; }
+
+    /* ─── TRUST BAR ──────────────────────────────────────────────────────── */
+    .trust-bar {
+      background: var(--off-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 28px;
+    }
+    .trust-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 500; color: var(--slate);
+    }
+    .trust-icon {
+      width: 40px; height: 40px;
+      background: var(--mint-pale); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .trust-icon svg { width: 20px; height: 20px; stroke: var(--mint); fill: none; stroke-width: 1.8; }
+
+    /* ─── SERVICIOS ──────────────────────────────────────────────────────── */
+    .services-bg { background: var(--white); }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .svc-card {
+      background: var(--white); padding: 32px 26px;
+      transition: background var(--ease), transform var(--ease);
+      cursor: default;
+    }
+    .svc-card:hover { background: var(--mint-pale); }
+
+    .svc-num {
+      font-family: var(--serif); font-size: 38px; line-height: 1;
+      color: var(--border); margin-bottom: 20px;
+      transition: color var(--ease);
+    }
+    .svc-card:hover .svc-num { color: var(--mint); }
+
+    .svc-card h3 {
+      font-family: var(--serif); font-size: 19px;
+      margin-bottom: 10px; line-height: 1.25;
+    }
+    .svc-card p { font-size: 14px; color: var(--slate); line-height: 1.65; }
+
+    .svc-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 18px; font-size: 13px; font-weight: 600;
+      color: var(--mint); opacity: 0;
+      transition: opacity var(--ease);
+    }
+    .svc-card:hover .svc-link { opacity: 1; }
+    .svc-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .services-cta {
+      margin-top: 40px; text-align: center;
+    }
+
+    /* ─── SPLIT FEATURE ──────────────────────────────────────────────────── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .split.reverse { direction: rtl; }
+    .split.reverse > * { direction: ltr; }
+
+    .split-img {
+      border-radius: var(--radius-lg); overflow: hidden;
+      aspect-ratio: 4/5; position: relative;
+    }
+    .split-img img { width: 100%; height: 100%; object-fit: cover; }
+    .split-img-badge {
+      position: absolute; bottom: 24px; right: 24px;
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 16px 20px; box-shadow: var(--shadow-lg);
+    }
+    .split-img-badge strong {
+      display: block; font-family: var(--serif);
+      font-size: 28px; color: var(--mint); line-height: 1;
+    }
+    .split-img-badge span { font-size: 12px; color: var(--slate); }
+
+    .split-content {}
+    .split-content h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3.5vw, 48px);
+      line-height: 1.12; margin-bottom: 20px;
+    }
+    .split-content p {
+      font-size: 16px; color: var(--slate);
+      line-height: 1.75; margin-bottom: 16px;
+    }
+
+    .check-list { list-style: none; margin: 24px 0 36px; display: flex; flex-direction: column; gap: 12px; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; font-weight: 500;
+    }
+    .check-list li::before {
+      content: '';
+      flex-shrink: 0; margin-top: 4px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--mint-pale);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%232ABFA3' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center;
+      background-size: 12px 12px;
+    }
+
+    /* ─── TARIFAS ────────────────────────────────────────────────────────── */
+    .tarifas-bg { background: var(--navy); }
+    .tarifas-bg .section-head h2 { color: var(--white); }
+    .tarifas-bg .section-head p { color: rgba(255,255,255,.55); }
+    .tarifas-bg .label { color: var(--mint-light); }
+    .tarifas-bg .label::before { background: var(--mint-light); }
+
+    .tarifas-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .tarifa-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius-lg); padding: 32px 28px;
+      transition: background var(--ease), border-color var(--ease);
+      position: relative;
+    }
+    .tarifa-card:hover {
+      background: rgba(42,191,163,.08);
+      border-color: rgba(42,191,163,.35);
+    }
+    .tarifa-card.featured {
+      background: rgba(42,191,163,.12);
+      border-color: var(--mint);
+    }
+    .tarifa-tag {
+      display: inline-block; margin-bottom: 20px;
+      background: var(--mint); color: var(--white);
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+    }
+    .tarifa-price {
+      font-family: var(--serif); line-height: 1;
+      margin-bottom: 12px;
+    }
+    .tarifa-price .from { font-size: 14px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+    .tarifa-price .amount {
+      font-size: 52px; color: var(--mint);
+    }
+    .tarifa-price .euro { font-size: 28px; }
+    .tarifa-card h3 { font-size: 17px; font-weight: 600; color: var(--white); margin-bottom: 10px; }
+    .tarifa-card p { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.65; }
+    .tarifa-divider {
+      height: 1px; background: rgba(255,255,255,.08);
+      margin: 20px 0;
+    }
+    .tarifa-note { font-size: 13px; color: rgba(255,255,255,.4); }
+
+    .tarifas-footer {
+      margin-top: 36px; text-align: center;
+      font-size: 14px; color: rgba(255,255,255,.45);
+    }
+    .tarifas-footer a { color: var(--mint-light); text-decoration: underline; }
+
+    /* ─── RESEÑAS ─────────────────────────────────────────────────────────── */
+    .reviews-bg { background: var(--off-white); }
+
+    .reviews-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 52px; gap: 24px; flex-wrap: wrap;
+    }
+    .review-score {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .review-score-num {
+      font-family: var(--serif); font-size: 64px; line-height: 1;
+      color: var(--navy);
+    }
+    .review-score-info { display: flex; flex-direction: column; gap: 4px; }
+    .review-score-info .stars { font-size: 18px; }
+    .review-score-info span { font-size: 13px; color: var(--slate); }
+
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .review-card {
+      background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 28px; box-shadow: var(--shadow);
+    }
+    .review-card .stars { font-size: 14px; margin-bottom: 14px; }
+    .review-card blockquote {
+      font-size: 15px; line-height: 1.7;
+      color: var(--navy); font-style: italic;
+      margin-bottom: 20px;
+    }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-av {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--mint-pale); color: var(--mint);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; flex-shrink: 0;
+    }
+    .review-author strong { display: block; font-size: 14px; font-weight: 600; }
+    .review-author span { font-size: 12px; color: var(--slate); }
+
+    /* ─── EQUIPO PREVIEW ─────────────────────────────────────────────────── */
+    .team-strip {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .team-photo { position: relative; overflow: hidden; }
+    .team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .team-photo-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(11,31,58,.85) 0%, transparent 100%);
+      padding: 28px;
+    }
+    .team-photo-overlay h3 {
+      font-family: var(--serif); font-size: 24px;
+      color: var(--white); margin-bottom: 4px;
+    }
+    .team-photo-overlay span { font-size: 13px; color: var(--mint-light); }
+
+    .team-info {
+      background: var(--navy);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 56px 52px;
+    }
+    .team-info h2 {
+      font-family: var(--serif); font-size: clamp(28px,3vw,42px);
+      color: var(--white); margin-bottom: 20px; line-height: 1.15;
+    }
+    .team-info p { font-size: 16px; color: rgba(255,255,255,.6); line-height: 1.75; margin-bottom: 14px; }
+    .team-certs {
+      margin: 24px 0 32px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .team-cert {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: rgba(255,255,255,.75);
+    }
+    .team-cert::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--mint); flex-shrink: 0;
+    }
+
+    /* ─── RESERVA CTA ────────────────────────────────────────────────────── */
+    .booking-cta-section { background: var(--mint); }
+    .booking-cta-inner {
+      max-width: 1180px; margin: 0 auto; padding: 80px 28px;
+      display: grid; grid-template-columns: 1fr auto; gap: 60px;
+      align-items: center;
+    }
+    .booking-cta-inner h2 {
+      font-family: var(--serif); font-size: clamp(32px,4vw,50px);
+      color: var(--white); line-height: 1.12; margin-bottom: 12px;
+    }
+    .booking-cta-inner p { font-size: 17px; color: rgba(255,255,255,.75); }
+    .booking-cta-actions { display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
+    .btn-white { background: var(--white); color: var(--mint); font-weight: 700; }
+    .btn-white:hover { background: var(--off-white); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,31,58,.15); }
+    .btn-ghost-dark {
+      background: transparent; color: rgba(255,255,255,.85);
+      border: 1.5px solid rgba(255,255,255,.4); font-size: 14px;
+    }
+    .btn-ghost-dark:hover { border-color: var(--white); color: var(--white); }
+    .booking-contact {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: rgba(255,255,255,.7);
+    }
+    .booking-contact svg { width: 16px; height: 16px; stroke: rgba(255,255,255,.6); fill: none; stroke-width: 2; }
+    .booking-contact a { color: rgba(255,255,255,.9); text-decoration: underline; }
+
+    /* ─── MAPA / UBICACIÓN ───────────────────────────────────────────────── */
+    .location-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .location-data { padding: 52px; background: var(--white); }
+    .location-data h2 {
+      font-family: var(--serif); font-size: 34px;
+      margin-bottom: 36px; line-height: 1.15;
+    }
+    .loc-list { list-style: none; display: flex; flex-direction: column; }
+    .loc-item {
+      display: flex; gap: 18px; padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .loc-item:last-child { border-bottom: none; }
+    .loc-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: var(--mint-pale); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .loc-icon svg { width: 20px; height: 20px; stroke: var(--mint); fill: none; stroke-width: 1.8; }
+    .loc-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--slate); font-weight: 600; margin-bottom: 4px; }
+    .loc-value { font-size: 15px; font-weight: 500; }
+    .loc-value a { color: var(--mint); }
+
+    .location-map { background: var(--mint-pale); min-height: 440px; }
+    .location-map iframe { width: 100%; height: 100%; min-height: 440px; border: none; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.6);
+      padding: 60px 28px 36px;
+    }
+    .footer-grid {
+      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 56px; margin-bottom: 52px;
+    }
+    .footer-brand .logo { margin-bottom: 18px; }
+    .footer-brand .logo-text strong { color: var(--white); }
+    .footer-brand p { font-size: 14px; line-height: 1.75; margin-bottom: 24px; }
+    .socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.55); font-size: 13px; font-weight: 700;
+      transition: all var(--ease);
+    }
+    .social-btn:hover { border-color: var(--mint); color: var(--mint); }
+    .footer-col h4 {
+      font-size: 12px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--white); margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 14px; transition: color var(--ease); }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      max-width: 1180px; margin: 0 auto;
+      padding-top: 28px; border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; flex-wrap: wrap; gap: 12px;
+    }
+
+    /* ─── SCROLL ANIMATIONS ──────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 64px 40px; }
+      .hero-left::after { display: none; }
+      .hero-right { min-height: 420px; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .tarifas-grid { grid-template-columns: repeat(2, 1fr); }
+      .split { grid-template-columns: 1fr; gap: 44px; }
+      .split.reverse { direction: ltr; }
+      .team-strip { grid-template-columns: 1fr; }
+      .team-photo { min-height: 400px; }
+      .booking-cta-inner { grid-template-columns: 1fr; gap: 36px; }
+      .booking-cta-actions { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+      .location-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero-left { padding: 48px 24px; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+      .hero-stat { flex: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .tarifas-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .reviews-header { flex-direction: column; align-items: flex-start; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .trust-inner { flex-direction: column; align-items: flex-start; }
+      .hero-card { left: 12px; }
+      .location-data { padding: 32px 24px; }
+      .team-info { padding: 40px 28px; }
+      .booking-cta-inner { padding: 56px 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ─── HEADER ─────────────────────────────────────────────────────────────── -->
+<header class="header" id="header">
+  <nav class="nav">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <!-- Foot SVG icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5 21c-1.5 0-2.8-.6-3.7-1.6C3.9 18.4 3.5 17 3.5 15.5c0-1.2.3-2.4.8-3.5.5-1 1.1-2 1.6-3 .4-.7.7-1.5.9-2.3.2-.8.2-1.6 0-2.3-.1-.4-.1-.8 0-1.1.2-.7.8-1.2 1.5-1.3.7-.1 1.4.2 1.8.8l.2.3c.3.5.5 1 .5 1.6 0 .5-.1 1-.3 1.5l-.1.2c-.1.3 0 .6.2.8.2.2.5.2.7.1.9-.4 1.9-.3 2.7.3.5.3.9.8 1.1 1.3.1.3.4.5.7.5.4 0 .7-.1 1-.3.4-.3.9-.4 1.4-.3.7.1 1.3.6 1.5 1.3.2.6.1 1.3-.2 1.9-.4.7-.5 1.5-.4 2.3.1.5.1 1 0 1.5-.3 1.3-1.1 2.4-2.3 3.1C13.6 20.7 12.5 21 11.3 21H8.5z"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <strong>Podología Parrilla</strong>
+        <span>Centro de Podología · Sevilla</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="tarifas.html">Tarifas</a></li>
+      <li><a href="equipo.html">Equipo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+
+    <a href="reservar.html" class="nav-cta">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservar cita
+    </a>
+
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Inicio</a>
+  <a href="servicios.html">Servicios</a>
+  <a href="tarifas.html">Tarifas</a>
+  <a href="equipo.html">Equipo</a>
+  <a href="faq.html">Preguntas frecuentes</a>
+  <a href="contacto.html">Contacto</a>
+  <a href="reservar.html" class="mobile-cta">Reservar cita</a>
+</div>
+
+
+<!-- ─── HERO ───────────────────────────────────────────────────────────────── -->
+<section class="hero" id="inicio">
+
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Centro de Podología y Fisioterapia · Sevilla
+    </div>
+
+    <h1>La salud de tus pies,<br>en <em>manos expertas</em></h1>
+
+    <p class="hero-desc">
+      Prevención, diagnóstico y tratamiento especializado. Más de 8 años cuidando
+      los pies de los sevillanos con rigor clínico y trato cercano.
+    </p>
+
+    <div class="hero-actions">
+      <a href="reservar.html" class="btn btn-mint">
+        Reservar cita
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="servicios.html" class="btn btn-ghost-white">Ver servicios</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>+500</strong>
+        <span>Pacientes atendidos</span>
+      </div>
+      <div class="hero-stat">
+        <strong>5.0</strong>
+        <span>Valoración Google</span>
+      </div>
+      <div class="hero-stat">
+        <strong>+8</strong>
+        <span>Años de experiencia</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img
+      src="https://images.pexels.com/photos/5619459/pexels-photo-5619459.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop"
+      alt="Profesional atendiendo en clínica de podología"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero-card">
+      <div class="hero-card-rating">
+        <span class="stars">★★★★★</span>
+        <strong>5.0</strong>
+      </div>
+      <p>Más de 100 reseñas en Google</p>
+      <span class="hero-card-tag">Colegiado · Sevilla</span>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ─── TRUST BAR ──────────────────────────────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Podólogo colegiado
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      +500 pacientes atendidos
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      Clínica en el centro de Sevilla
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      Atención sin esperas
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      Fisioterapia y osteopatía
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── SERVICIOS ──────────────────────────────────────────────────────────── -->
+<section class="section services-bg" id="servicios">
+  <div class="container">
+    <div class="section-head">
+      <span class="label reveal">Especialidades</span>
+      <h2 class="reveal reveal-delay-1">Todo lo que necesitan tus pies,<br>en un solo lugar</h2>
+      <p class="reveal reveal-delay-2">Tratamientos especializados para cada tipo de patología, con el rigor clínico y la atención personalizada que cada paciente merece.</p>
+    </div>
+
+    <div class="services-grid reveal">
+      <div class="svc-card">
+        <div class="svc-num">01</div>
+        <h3>Podología Infantil</h3>
+        <p>Diagnóstico y seguimiento de las alteraciones del pie durante el crecimiento. Detección temprana para evitar problemas en la edad adulta.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">02</div>
+        <h3>Quiropodia</h3>
+        <p>Tratamiento de durezas, callos, papilomas y uñas encarnadas. Higiene y cuidado del pie con los más altos estándares clínicos.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">03</div>
+        <h3>Estudio de la Pisada</h3>
+        <p>Análisis biomecánico completo mediante plataforma de presiones. Diagnóstico preciso de la marcha y el apoyo plantar.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">04</div>
+        <h3>Plantillas Personalizadas</h3>
+        <p>Soportes plantares a medida fabricados tras la exploración biomecánica. Adaptadas a tu anatomía y estilo de vida.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">05</div>
+        <h3>Cirugía Podológica</h3>
+        <p>Resolución definitiva de la uña encarnada y otras patologías. Cirugía ambulatoria con seguimiento postoperatorio completo.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">06</div>
+        <h3>Podología Deportiva</h3>
+        <p>Prevención y tratamiento de lesiones en el deportista. Estudio biomecánico orientado al rendimiento y la recuperación.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">07</div>
+        <h3>Fisioterapia</h3>
+        <p>Abordaje de patologías musculoesqueléticas agudas y crónicas. Terapia manual, invasiva y ejercicio terapéutico.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">08</div>
+        <h3>Osteopatía</h3>
+        <p>Tratamiento manual global del paciente buscando la causa del problema. Restauración del equilibrio funcional del organismo.</p>
+        <a href="servicios.html" class="svc-link">Saber más <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="services-cta reveal">
+      <a href="servicios.html" class="btn btn-navy">Ver todos los servicios</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── FEATURE SPLIT ──────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--off-white);">
+  <div class="container">
+    <div class="split reveal">
+      <div class="split-img">
+        <img
+          src="https://images.pexels.com/photos/7446989/pexels-photo-7446989.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+          alt="Exploración biomecánica del pie"
+          loading="lazy"
+        />
+        <div class="split-img-badge">
+          <strong>+8</strong>
+          <span>Años de experiencia</span>
+        </div>
+      </div>
+      <div class="split-content">
+        <span class="label">Por qué elegirnos</span>
+        <h2>Atención especializada.<br>Resultados que duran.</h2>
+        <p>En el Centro de Podología Parrilla no tratamos síntomas, buscamos la causa real del problema. Cada paciente recibe una exploración exhaustiva antes de instaurar cualquier tratamiento.</p>
+        <p>Nuestro enfoque combina la tecnología clínica más avanzada con una atención cercana y sin tecnicismos, para que entiendas exactamente qué le pasa a tu pie y cómo lo vamos a resolver.</p>
+        <ul class="check-list">
+          <li>Exploración biomecánica completa en primera visita</li>
+          <li>Plataforma de presiones y análisis de la marcha</li>
+          <li>Plantillas fabricadas en el propio centro</li>
+          <li>Seguimiento personalizado de cada paciente</li>
+          <li>Servicio a domicilio disponible en Sevilla</li>
+        </ul>
+        <a href="equipo.html" class="btn btn-navy">Conoce al equipo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── TARIFAS ────────────────────────────────────────────────────────────── -->
+<section class="section tarifas-bg" id="tarifas">
+  <div class="container">
+    <div class="section-head centered">
+      <span class="label reveal">Precios</span>
+      <h2 class="reveal reveal-delay-1">Tarifas claras,<br>sin sorpresas</h2>
+      <p class="reveal reveal-delay-2" style="color: rgba(255,255,255,.55)">El precio incluye la exploración, el diagnóstico y el tratamiento indicado. Sin costes ocultos.</p>
+    </div>
+
+    <div class="tarifas-grid">
+      <div class="tarifa-card reveal">
+        <div class="tarifa-price">
+          <div class="from">Desde</div>
+          <div class="amount"><span class="euro">€</span>30</div>
+        </div>
+        <h3>Consulta Podológica</h3>
+        <p>Exploración y diagnóstico del problema. Incluye quiropodia dentro de la consulta.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">30 min aprox.</span>
+      </div>
+
+      <div class="tarifa-card featured reveal reveal-delay-1">
+        <span class="tarifa-tag">Más solicitado</span>
+        <div class="tarifa-price">
+          <div class="from">Desde</div>
+          <div class="amount"><span class="euro">€</span>50</div>
+        </div>
+        <h3>Exploración Biomecánica</h3>
+        <p>Estudio completo de la pisada con plataforma de presiones. Análisis de la marcha e instauración del tratamiento.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">45 min aprox.</span>
+      </div>
+
+      <div class="tarifa-card reveal reveal-delay-2">
+        <div class="tarifa-price">
+          <div class="from">Desde</div>
+          <div class="amount"><span class="euro">€</span>170</div>
+        </div>
+        <h3>Biomecánica + Plantillas</h3>
+        <p>Exploración biomecánica completa más confección de soportes plantares personalizados.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">60 min aprox.</span>
+      </div>
+
+      <div class="tarifa-card reveal">
+        <div class="tarifa-price">
+          <div class="amount"><span class="euro">€</span>120</div>
+        </div>
+        <h3>Verruga Plantar (1 lesión)</h3>
+        <p>Diagnóstico y tratamiento completo hasta la resolución. Incluye todas las curas y revisiones necesarias.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">Precio cerrado, sin curas extra</span>
+      </div>
+
+      <div class="tarifa-card reveal reveal-delay-1">
+        <div class="tarifa-price">
+          <div class="amount"><span class="euro">€</span>150</div>
+        </div>
+        <h3>Verrugas (2 o más lesiones)</h3>
+        <p>Tratamiento completo de múltiples verrugas con seguimiento hasta la resolución definitiva de todas.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">Precio cerrado</span>
+      </div>
+
+      <div class="tarifa-card reveal reveal-delay-2">
+        <div class="tarifa-price">
+          <div class="from">Desde</div>
+          <div class="amount"><span class="euro">€</span>40</div>
+        </div>
+        <h3>Órtesis de Silicona</h3>
+        <p>Confección de órtesis o prótesis de silicona personalizadas. Pequeña 40€ · Mediana 45€ · Grande 50€.</p>
+        <div class="tarifa-divider"></div>
+        <span class="tarifa-note">Fabricación en el centro</span>
+      </div>
+    </div>
+
+    <p class="tarifas-footer reveal">
+      ¿No encuentras lo que buscas?
+      <a href="tarifas.html">Ver tarifas completas</a> o
+      <a href="contacto.html">consúltanos sin compromiso</a>.
+    </p>
+  </div>
+</section>
+
+
+<!-- ─── RESEÑAS ────────────────────────────────────────────────────────────── -->
+<section class="section reviews-bg">
+  <div class="container">
+    <div class="reviews-header reveal">
+      <div>
+        <span class="label">Opiniones</span>
+        <h2 class="section-head" style="margin-bottom:0">Lo que dicen<br>nuestros pacientes</h2>
+      </div>
+      <div class="review-score">
+        <span class="review-score-num">5.0</span>
+        <div class="review-score-info">
+          <span class="stars">★★★★★</span>
+          <span>Valoración media</span>
+          <span>Google My Business</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"José Manuel, grandísimo profesional. Vine por una cuestión de plantillas y me fui con eso junto con una clase aprendida de mis pies. Llevo con las plantillas 6 meses y estoy notando mucha mejoría en mi día a día."</blockquote>
+        <div class="review-author">
+          <div class="review-av">A</div>
+          <div>
+            <strong>Andrés Fernández</strong>
+            <span>Google · hace 4 meses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <blockquote>"El Centro de Podología de José Manuel Parrilla destaca por su trato cercano y profesional. Se nota un verdadero interés por escuchar al paciente y explicar todo con claridad."</blockquote>
+        <div class="review-author">
+          <div class="review-av">F</div>
+          <div>
+            <strong>Fátima López-Villarino</strong>
+            <span>Google · hace 2 meses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Acudí a realizarme el estudio de pisada para renovar mis plantillas de running. Realizó un estudio minucioso que le permitió detectar carencias que hasta la fecha no me habían detectado. 100% recomendable."</blockquote>
+        <div class="review-author">
+          <div class="review-av">T</div>
+          <div>
+            <strong>Tamara C.M.</strong>
+            <span>Google · hace 6 meses</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── EQUIPO PREVIEW ─────────────────────────────────────────────────────── -->
+<section class="section" style="background: var(--white);">
+  <div class="container">
+    <div class="team-strip reveal">
+      <div class="team-photo">
+        <img
+          src="https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop&facepad=3&faces=1"
+          alt="José Manuel Parrilla — Podólogo colegiado en Sevilla"
+          loading="lazy"
+        />
+        <div class="team-photo-overlay">
+          <h3>José Manuel Parrilla</h3>
+          <span>Podólogo colegiado · Sevilla</span>
+        </div>
+      </div>
+
+      <div class="team-info">
+        <span class="label" style="color:var(--mint-light)">El profesional</span>
+        <h2>Experiencia, precisión<br>y trato humano</h2>
+        <p>Podólogo con amplia experiencia en el diagnóstico y tratamiento de patologías del pie, tanto a nivel clínico como deportivo.</p>
+        <p>Su enfoque se basa en escuchar a cada paciente, entender su problema en profundidad y ofrecer soluciones reales y duraderas.</p>
+        <ul class="team-certs">
+          <li class="team-cert">Grado en Podología</li>
+          <li class="team-cert">Especialista en Biomecánica y Estudio de la Pisada</li>
+          <li class="team-cert">Podología Deportiva</li>
+          <li class="team-cert">Cirugía Podológica Ambulatoria</li>
+        </ul>
+        <a href="equipo.html" class="btn btn-mint">Ver perfil completo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── RESERVA CTA ────────────────────────────────────────────────────────── -->
+<section class="booking-cta-section">
+  <div class="booking-cta-inner">
+    <div>
+      <h2>¿Tienes algún problema<br>con tus pies?</h2>
+      <p>Reserva hoy. Sin lista de espera, con la atención que mereces.</p>
+    </div>
+    <div class="booking-cta-actions">
+      <a href="reservar.html" class="btn btn-white btn-lg">Reservar cita online</a>
+      <div class="booking-contact">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        O llámanos al <a href="tel:644696197">644 69 61 97</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── UBICACIÓN ──────────────────────────────────────────────────────────── -->
+<section class="section" id="ubicacion" style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="label">Dónde estamos</span>
+      <h2>Clínica en el centro de Sevilla</h2>
+    </div>
+
+    <div class="location-grid reveal">
+      <div class="location-data">
+        <h2>Información de contacto</h2>
+        <ul class="loc-list">
+          <li class="loc-item">
+            <div class="loc-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="loc-label">Dirección</div>
+              <div class="loc-value">Calle Arroyo, 22 · Sevilla</div>
+            </div>
+          </li>
+          <li class="loc-item">
+            <div class="loc-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="loc-label">Teléfono</div>
+              <div class="loc-value"><a href="tel:644696197">644 69 61 97</a></div>
+            </div>
+          </li>
+          <li class="loc-item">
+            <div class="loc-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="loc-label">Email</div>
+              <div class="loc-value"><a href="mailto:podologiaparrilla@gmail.com">podologiaparrilla@gmail.com</a></div>
+            </div>
+          </li>
+          <li class="loc-item">
+            <div class="loc-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div class="loc-label">Horario</div>
+              <div class="loc-value">Lunes a viernes: 9:00–14:00 / 16:00–20:00</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="location-map">
+        <iframe
+          title="Ubicación Podología Parrilla Sevilla"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3170!2d-5.9943!3d37.3828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCalle+Arroyo+22+Sevilla!5e0!3m2!1ses!2ses!4v1"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo" style="margin-bottom:18px; display:inline-flex;">
+        <div class="logo-mark"><svg viewBox="0 0 24 24" fill="#2ABFA3"><path d="M8.5 21c-1.5 0-2.8-.6-3.7-1.6C3.9 18.4 3.5 17 3.5 15.5c0-1.2.3-2.4.8-3.5.5-1 1.1-2 1.6-3 .4-.7.7-1.5.9-2.3.2-.8.2-1.6 0-2.3-.1-.4-.1-.8 0-1.1.2-.7.8-1.2 1.5-1.3.7-.1 1.4.2 1.8.8l.2.3c.3.5.5 1 .5 1.6 0 .5-.1 1-.3 1.5l-.1.2c-.1.3 0 .6.2.8.2.2.5.2.7.1.9-.4 1.9-.3 2.7.3.5.3.9.8 1.1 1.3.1.3.4.5.7.5.4 0 .7-.1 1-.3.4-.3.9-.4 1.4-.3.7.1 1.3.6 1.5 1.3.2.6.1 1.3-.2 1.9-.4.7-.5 1.5-.4 2.3.1.5.1 1 0 1.5-.3 1.3-1.1 2.4-2.3 3.1C13.6 20.7 12.5 21 11.3 21H8.5z"/></svg></div>
+        <div class="logo-text">
+          <strong style="color:white">Podología Parrilla</strong>
+          <span style="color:rgba(255,255,255,.4)">Centro de Podología · Sevilla</span>
+        </div>
+      </a>
+      <p>Centro especializado en el diagnóstico y tratamiento de patologías del pie. Calle Arroyo, 22 · Sevilla.</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/podologiaparrilla/" class="social-btn" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        <a href="https://www.facebook.com/podologia.parrilla/" class="social-btn" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+        <a href="https://es.linkedin.com/in/jos%C3%A9-manuel-parrilla-cruzado-72a366220" class="social-btn" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <ul>
+        <li><a href="servicios.html">Podología Infantil</a></li>
+        <li><a href="servicios.html">Quiropodia</a></li>
+        <li><a href="servicios.html">Estudio de la Pisada</a></li>
+        <li><a href="servicios.html">Plantillas Personalizadas</a></li>
+        <li><a href="servicios.html">Cirugía Podológica</a></li>
+        <li><a href="servicios.html">Podología Deportiva</a></li>
+        <li><a href="servicios.html">Fisioterapia</a></li>
+        <li><a href="servicios.html">Osteopatía</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Clínica</h4>
+      <ul>
+        <li><a href="equipo.html">Equipo</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="faq.html">Preguntas frecuentes</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="reservar.html">Reservar cita</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="tel:644696197">644 69 61 97</a></li>
+        <li><a href="mailto:podologiaparrilla@gmail.com">podologiaparrilla@gmail.com</a></li>
+        <li style="color:rgba(255,255,255,.35); font-size:14px; padding-top:4px">Calle Arroyo, 22<br>Sevilla</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; 2025 Centro de Podología Parrilla. Todos los derechos reservados.</span>
+    <span style="color:rgba(255,255,255,.3)">Diseño web profesional</span>
+  </div>
+</footer>
+
+
+<!-- ─── SCRIPTS ────────────────────────────────────────────────────────────── -->
+<script>
+  // Header scroll shadow
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // Mobile nav toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.toggle('open');
+  });
+  // Close on link click
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileNav.classList.remove('open'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
