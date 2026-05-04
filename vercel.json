@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": ".",
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/admin", "dest": "/admin/index.html" },
@@ -9,12 +7,6 @@
     { "src": "/(.*)\\.html", "dest": "/$1.html" },
     { "src": "/", "dest": "/index.html" }
   ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs20.x",
-      "maxDuration": 10
-    }
-  },
   "headers": [
     {
       "source": "/admin/(.*)",
